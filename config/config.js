@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 module.exports = {
 	development : {
 		app : {
@@ -9,8 +11,10 @@ module.exports = {
 			saml : {
 				path : '/login/callback',
 				entryPoint : 'https://openidp.feide.no/simplesaml/saml2/idp/SSOService.php',
-				issuer : 'passport-saml'
+				issuer : 'passport-saml',
+                //privateCert: fs.readFileSync('./certificate.crt', 'utf-8')
 			}
 		}
+
 	}
 }

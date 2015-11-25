@@ -17,7 +17,7 @@ module.exports = function(app, config, passport) {
 		passport.authenticate(config.passport.strategy,
 		{
 			successRedirect : "/",
-			failureRedirect : "/login",
+			failureRedirect : "/login"
 		})
 	);
 
@@ -47,9 +47,34 @@ module.exports = function(app, config, passport) {
 	    }
 	});
 
-	app.get('/logout', function(req, res) {
-		req.logout();
-		// TODO: invalidate session on IP
-		res.redirect('/');
+	app.get("/private", function(req, res) {
+    	if(req.isAuthenticated()){
+			res.render("private",
+				{
+					user : req.user
+				});
+   		} else {
+    	    res.redirect("/login");
+	    }
 	});
+
+	app.get("/admin", function(req, res) {
+    	if(req.isAuthenticated()){
+			res.render("admin",
+				{
+					user : req.user
+				});
+   		} else {
+    	    res.redirect("/login");
+	    }
+	});
+
+
+    app.get('/logout',
+        passport.authenticate('basic', { session: false }),
+        function(req, res) {
+            res.json({ id: req.user.id, username: req.user.username });
+            req.logOut();
+            res.redirect('/');
+        });
 }

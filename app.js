@@ -3,6 +3,7 @@ var express = require('express'),
   path = require('path'),
   passport = require("passport");
 
+
 var env = process.env.NODE_ENV || 'development',
   config = require('./config/config')[env];
 
@@ -20,7 +21,7 @@ app.configure(function () {
   app.use(express.bodyParser());
   app.use(express.session(
     {
-      secret: 'this shit hits'
+      secret: 'spike'
     }));
   app.use(passport.initialize());
   app.use(passport.session());
@@ -57,6 +58,8 @@ app.use(function(req, res, next){
   }
   res.type('txt').send('Not found');
 });
+
+
 
 
 require('./config/routes')(app, config, passport);

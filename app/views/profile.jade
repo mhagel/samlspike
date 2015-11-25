@@ -1,12 +1,28 @@
 extends layout
 
 block content
-	h1 Profile
+    h1 Profile
 
-	dl
-		dt Display name
-		dd #{user.displayName}
-		dt Email
-		dd #{user.email}
+    dl
+        dt Display name
+        dd #{user.displayName}
+        dt Email
+        dd #{user.email}
+        dt Roles
+        dd user.role
+        br
+        dt.dropdown
+            a(href="#", data-toggle="dropdown").dropdown-toggle Use Site As:
+            ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu')
+                li
+                    a(href='/', tabindex='-1') Regular User
+                li
+                    a(href='/private', tabindex='-1') Moderator
+                li
+                    a(href='/admin', tabindex='-1') Admin
+        script.
+            $('.dropdown-toggle').dropdown()
 
-	a(href="/logout") Logout
+
+
+    a(href="/logout") Logout

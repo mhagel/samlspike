@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 Hello, Admin #{user.firstName}
+        br
+        a(href="/") Home
+        br
+        a(href="/profile") Profile
+        br
+        a(href="/private") Go to Moderator Page
+        br
+        a(href="/logout") Logout
