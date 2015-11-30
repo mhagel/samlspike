@@ -1,3 +1,5 @@
+var user = require('./../authorization.js');
+
 module.exports = function(app, config, passport) {
 	app.get("/", function(req, res) {
 		if(req.isAuthenticated()) {
@@ -32,6 +34,10 @@ module.exports = function(app, config, passport) {
 		}
 	);
 
+	//app.get("/denied", function (req, res) {
+	//	res.render("denied");
+	//});
+
 	app.get("/signup", function (req, res) {
 		res.render("signup");
 	});
@@ -47,7 +53,7 @@ module.exports = function(app, config, passport) {
 	    }
 	});
 
-	app.get("/private", function(req, res) {
+	app.get("/private", user.is('moderator'), function(req, res) {
     	if(req.isAuthenticated()){
 			res.render("private",
 				{
@@ -58,7 +64,7 @@ module.exports = function(app, config, passport) {
 	    }
 	});
 
-	app.get("/admin", function(req, res) {
+	app.get("/admin", user.is('admin'), function(req, res) {
     	if(req.isAuthenticated()){
 			res.render("admin",
 				{
@@ -69,12 +75,15 @@ module.exports = function(app, config, passport) {
 	    }
 	});
 
+	app.post('/auth/saml/logout/callback', passport.logoutSamlCallback);
 
     app.get('/logout',
-        passport.authenticate('basic', { session: false }),
+        passport.authenticate(config.passport.strategy, { session: false }),
         function(req, res) {
             res.json({ id: req.user.id, username: req.user.username });
-            req.logOut();
-            res.redirect('/');
+            req.logout();
+            req.session = null;
+            req.session.destroy();
+            res.render('loggedout');
         });
-}
+};

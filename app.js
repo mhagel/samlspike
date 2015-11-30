@@ -1,8 +1,9 @@
 var express = require('express'),
   http = require('http'),
   path = require('path'),
-  passport = require("passport");
-
+  passport = require('passport'),
+  user = require('./authorization.js'),
+  authentication = require('passport');
 
 var env = process.env.NODE_ENV || 'development',
   config = require('./config/config')[env];
@@ -28,6 +29,9 @@ app.configure(function () {
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+  //connect-roles:
+  app.use(authentication);
+  app.use(user.middleware());
 });
 
 app.configure('development', function () {
